@@ -53,9 +53,9 @@ int inicializarElectros(eElectrodomestico *list, int len)
     }
 
 
-int agregarElectro(eElectrodomestico *list, int len, int id, int serie,
+int agregarElectro(eElectrodomestico *list, int len, int id, int serie,int idMarca,
 	int modelo)
-    {
+    {printf("vale %d",idMarca);
     int ret = -1;
     int position;
 
@@ -66,6 +66,7 @@ int agregarElectro(eElectrodomestico *list, int len, int id, int serie,
 	list[position].idElectro = id;
 	list[position].numSerie = serie;
 	list[position].modelo = modelo;
+	list[position].idMarca= idMarca;
 	list[position].isEmpty = 0;
 	ret = 0;
 	}

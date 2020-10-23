@@ -61,7 +61,6 @@ int agregarReparacion(eReparacion *list, int len, int idRep,
 	if (validaFecha(list, position, len) == 0)
 	    {
 	    list[position].id = idRep;
-	  //  list[position].idCliente.idCliente = cliente;
 	    list[position].idServ = servicio;
 	    list[position].numSerieElectro = numSerieElectro;
 	    list[position].isEmpty = 0;

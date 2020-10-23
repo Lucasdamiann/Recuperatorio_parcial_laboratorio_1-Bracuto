@@ -22,7 +22,7 @@ typedef struct
     {
 	int idElectro;
 	int numSerie;
-	int idMarca; //validar
+	int idMarca;
 	int modelo;
 	int isEmpty;
     } eElectrodomestico;
@@ -38,10 +38,11 @@ int inicializarElectros(eElectrodomestico *list, int len);
  * \param int len valor de largo del array.
  * \param int id valor de id de electrodomestico.
  * \param int serie valor de numero de serie de electrodomestico.
+ * \param int idMarca valor de numero de marca de electrodomestico.
  * \param int modelo valor de numero de modelo.
  *\ return int ret (-1) si hay Error [puntero == NULL o largo de array <0] - (0) si está Ok
  */
-int agregarElectro(eElectrodomestico *list, int len, int id, int serie,
+int agregarElectro(eElectrodomestico *list, int len, int id, int serie,int idMarca,
 	int modelo);
 /*\brief Asigna valores hardcodeados a la estructura.
  * \param eMarca*lista puntero a array de estructura.

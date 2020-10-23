@@ -6,9 +6,11 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "utn.h"
 #include "reparacion.h"
 #include "electrodomestico.h"
+#include "informes.h"
 
 int menuOpciones()
     {
@@ -21,7 +23,14 @@ int menuOpciones()
     int identify = 0;
     int identifyRep = 0;
     int index;
+    int numeroMarca;
+    int numeroSerie;
     int contadorElectro = 0;
+    int contServ1=0;
+    int contServ2=0;
+    int contServ3=0;
+    int contServ4=0;
+    char masPedido[10];
     eCliente cliente[QTY_ELEC];
     eReparacion reparacion[QTY_ELEC];
     eServicio auxServ;
@@ -39,9 +48,9 @@ int menuOpciones()
 	{
 	printf("\n<<MENU INICIAL>>\n");
 	printf(
-		"\n#1-ALTA DE ELECTRODOMESTICO.\n#2-MODIFICAR ELECTRODOMESTICO.\n#3-BAJA DE ELECTRODOMESTICO.\n#4-LISTAR ELECTRODOMESTICOS.\n#5-LISTAR MARCAS.\n#6-LISTAR SERVICIOS.\n#7-ALTA DE REPARACION.\n#8-LISTAR REPARACIONES.\n#9-LISTAR CLIENTES.\n#10-SALIR.\n");
+		"\n#1-ALTA DE ELECTRODOMESTICO.\n#2-MODIFICAR ELECTRODOMESTICO.\n#3-BAJA DE ELECTRODOMESTICO.\n#4-LISTAR ELECTRODOMESTICOS.\n#5-LISTAR MARCAS.\n#6-LISTAR SERVICIOS.\n#7-ALTA DE REPARACION.\n#8-LISTAR REPARACIONES.\n#9-LISTAR CLIENTES.\n#10-INFORMES.\n#11-SALIR.\n");
 	utn_getNumber(&comando, "\nINGRESE OPCION: ", "\nOPCION INCORRECTA\n",
-		0, 10, 2);
+		1, 11, 2);
 	switch (comando)
 	    {
 	case 1:
@@ -56,7 +65,7 @@ int menuOpciones()
 		utn_getNumber(&auxMarca.idMarca, "\n\nINGRESE ID DE MARCA: ",
 			"\nALGO SALIO MAL\n", 1000, 1004, 2);
 		get_ID(identify, &identify);
-		agregarUsuario(electro, QTY_ELEC, identify, auxElectro.numSerie,
+		agregarElectro(electro, QTY_ELEC, identify, auxElectro.numSerie,auxMarca.idMarca,
 			auxElectro.modelo);
 		contadorElectro++;
 		index = findElectroById(electro, QTY_ELEC, identify);
@@ -246,8 +255,41 @@ int menuOpciones()
 			printServicios(servicios, QTY_SRV);
 			if (utn_getNumber(&auxServ.idServicio,
 				"\nINGRESE ID DE SERVICIO: ",
-				"\nID INEXISTENTE\n", 20000, 20003, 2)==0)
+				"\nID INEXISTENTE\n", 20000, 20003, 2) == 0)
 			    {
+			    if(auxServ.idServicio==20000)
+				{
+				contServ1++;
+				}
+			    if(auxServ.idServicio==20001)
+			    {
+				contServ2++;
+			    }
+			    if(auxServ.idServicio==20002)
+				{
+				contServ3++;
+				}
+			    if(auxServ.idServicio==20003)
+				{
+				contServ4++;
+				}
+			    if(contServ1>contServ2 && contServ1>contServ3 && contServ1>contServ4)
+				{
+				strncpy(masPedido,"GARANTIA",10);
+				}
+			    if(contServ2>contServ1 && contServ2>contServ3 && contServ2>contServ4)
+				{
+				strncpy(masPedido,"MANTENIM.",10);
+				}
+			    if(contServ3>contServ1 && contServ3>contServ2 && contServ3>contServ4)
+				{
+				strncpy(masPedido,"REPUESTOS",10);
+				}
+			    if(contServ4>contServ1 && contServ4>contServ2 && contServ4>contServ3)
+				{
+				strncpy(masPedido,"REFACCION",10);
+				}
+
 			    printf("\nINGRESE FECHA DE ALTA\n");
 			    agregarReparacion(reparacion, QTY_ELEC, identifyRep,
 				    auxServ.idServicio, auxElectro.idElectro);
@@ -296,6 +338,49 @@ int menuOpciones()
 	    printf("\n\n");
 	    break;
 	case 10:
+		printf("\nSECCION INFORMES\n");
+	    if (flag1 == 1)
+		{
+		printf("\n#1-MOSTRAR ELECTRODOMESTICOS DEL AÑO.\n#2-MOSTRAR ELECTRODOMESTICOS DE UNA MARCA SELECCIONADA.\n#3-MOSTRAR TODAS LAS REPARACIONES EFECTUADAS AL ELECTRODOMESTICO SELECCIONADO.\n#4-LISTAR LOS ELECTRODOMESTICOS QUE NO TUVIERON REPARACIONES.\n#6-MOSTRAR EL SERVICIO MAS PEDIDO.\n#9-TRABAJOS REALIZADOS A ELECTRODOMESTICOS DEL AÑO 2018.\n");
+		utn_getNumber(&comando, "\nINGRESE OPCION: ",
+			"\nOPCION INCORRECTA\n", 1, 12, 2);
+		if(comando>=1 && comando<=12)
+		    {
+		    switch(comando)
+			{
+		    case 1:
+			printElectros2020(electro, QTY_ELEC);
+			printf("\n\n");
+			break;
+		    case 2:
+			printMarcas(marca, QTY_MARCA);
+			utn_getNumber(&numeroMarca, "\nINGRESE OPCION: ","\nOPCION INCORRECTA\n", 1000, 1004, 2);
+			printElectrosMarca(electro, numeroMarca, QTY_ELEC);
+			break;
+		    case 3:
+			printElectros(electro, QTY_ELEC);
+			utn_getNumber(&numeroSerie, "\nSELECCIONE NUMERO DE SERIE: ","\nOPCION INCORRECTA\n", 0, 9999, 2);
+			printReparacionesEfectuadas(reparacion, cliente, numeroSerie, QTY_ELEC);
+			break;
+		    case 4:
+			printSinReparacionesEfectuadas(reparacion, cliente,electro, QTY_ELEC);
+			break;
+		    case 6:
+			printf("\nEL SERVICIO MAS PEDIDO ES %s",masPedido);
+			break;
+		    case 9:
+			printReparacionesEfectuadas2018(reparacion, servicios, electro, QTY_ELEC);
+			break;
+		    }
+		}
+		}
+	    else
+		{
+		printf(
+			"\nDEBE INGRESAR ELESCTRODOMESTICOS ANTES DE LISTAR INFORMES\n");
+		}
+	    break;
+	case 11:
 	    printf("\nSALIENDO DEL PROGRAMA\n\n¡HASTA LUEGO!\n");
 	    printf("\n\n");
 	    respuesta = 'j';

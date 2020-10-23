@@ -41,8 +41,8 @@ typedef struct
     {
 	int id;
 	eCliente idCliente;
-	int numSerieElectro; //validar
-	int idServ; //validar
+	int numSerieElectro;
+	int idServ;
 	eFecha fecha;
 	int isEmpty;
     } eReparacion;
